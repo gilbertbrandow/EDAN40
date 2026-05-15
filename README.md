@@ -1,1 +1,1 @@
-# EDAN40
+# EDAN40 Haskell Functional Programming
