@@ -52,16 +52,15 @@ stateOfMind b =
 -- A rule maps a pattern to many answers, so we choose one
 -- at random, and that's our bot
 makePair :: Rule -> IO (Pattern String, Template String)
-{- TO BE WRITTEN -}
-makePair = undefined
+makePair (Rule (pat, templates)) = do
+  r <- randomIO :: IO Float
+  return (pat, pick r templates)
 
 rulesApply :: [(Pattern String, Template String)] -> Phrase -> Phrase
-{- TO BE WRITTEN -}
-rulesApply = undefined
+rulesApply rules phrase = fromMaybe phrase (transformationsApply reflect rules phrase)
 
 reflect :: Phrase -> Phrase
-{- TO BE WRITTEN -}
-reflect = undefined
+reflect = map (\word -> fromMaybe word (lookup word reflections))
 
 reflections =
   [ ("am",     "are"),
@@ -98,8 +97,7 @@ rulesCompile :: [(String, [String])] -> BotBrain
 rulesCompile = map ruleCompile
 
 ruleCompile :: (String, [String]) -> Rule
-{- TO BE WRITTEN -}
-ruleCompile = undefined
+ruleCompile (pat, templates) = Rule (starPattern (map toLower pat), map starPattern templates)
 
 --------------------------------------
 
@@ -108,8 +106,7 @@ ruleCompile = undefined
 -- If we choose one element that represents the wildcard
 -- mkPattern '*' "Hi *!" => [Item 'H', Item 'i', Wildcard, Item '!']
 mkPattern :: Eq a => a -> [a] -> Pattern a
-{- TO BE WRITTEN -}
-mkPattern = undefined
+mkPattern wc = Pattern . map (\x -> if x == wc then Wildcard else Item x)
 
 stringToPattern :: String -> String -> Pattern String
 stringToPattern wc = mkPattern wc . words
@@ -136,8 +133,7 @@ reduce :: Phrase -> Phrase
 reduce = reductionsApply reductions
 
 reductionsApply :: [(Pattern String, Pattern String)] -> Phrase -> Phrase
-{- TO BE WRITTEN -}
-reductionsApply = undefined
+reductionsApply rules = fix (try (transformationsApply id rules))
 
 
 -------------------------------------------------------
@@ -146,14 +142,22 @@ reductionsApply = undefined
 
 -- Replaces a wildcard in a template with the list given as the third argument
 substitute :: Eq a => Template a -> [a] -> [a]
-{- TO BE WRITTEN -}
-substitute = undefined
+substitute (Pattern l) replacement = concatMap (\elem -> case elem of
+    Item x   -> [x]
+    Wildcard -> replacement) l
 
 -- Tries to match two lists. If they match, the result consists of the sublist
 -- bound to the wildcard in the pattern list.
 match :: Eq a => Pattern a -> [a] -> Maybe [a]
-{- TO BE WRITTEN -}
-match = undefined
+match (Pattern []) [] = Just []
+match (Pattern []) _  = Nothing
+match _ [] = Nothing
+match (Pattern (Item x:ps)) (y:ys)
+  | x == y    = match (Pattern ps) ys
+  | otherwise = Nothing
+match (Pattern (Wildcard:ps)) ys =                                                                                                             
+    orElse (singleWildcardMatch (Pattern (Wildcard:ps)) ys) (longerWildcardMatch (Pattern (Wildcard:ps)) ys)     
+
 
 -- Helper function to match
 singleWildcardMatch, longerWildcardMatch :: Eq a => Pattern a -> [a] -> Maybe [a]
@@ -161,8 +165,10 @@ singleWildcardMatch (Pattern (Wildcard:ps)) (x:xs) =
   case match (Pattern ps) xs of
     Nothing -> Nothing
     Just _ -> Just [x]
-{- TO BE WRITTEN -}
-longerWildcardMatch = undefined
+longerWildcardMatch (Pattern (Wildcard:ps)) (x:xs) =
+  case match (Pattern (Wildcard:ps)) xs of
+    Nothing   -> Nothing
+    Just rest -> Just (x:rest)
 
 
 
@@ -176,10 +182,11 @@ matchAndTransform transform pat = (mmap transform) . (match pat)
 
 -- Applying a single pattern
 transformationApply :: Eq a => ([a] -> [a]) -> [a] -> (Pattern a, Template a) -> Maybe [a]
-{- TO BE WRITTEN -}
-transformationApply = undefined
+transformationApply transform list (pat, tmpl) =
+  mmap (substitute tmpl) (matchAndTransform transform pat list)
 
 -- Applying a list of patterns until one succeeds
 transformationsApply :: Eq a => ([a] -> [a]) -> [(Pattern a, Template a)] -> [a] -> Maybe [a]
-{- TO BE WRITTEN -}
-transformationsApply = undefined
+transformationsApply _ [] _ = Nothing
+transformationsApply transform (pt:pts) list =
+  orElse (transformationApply transform list pt) (transformationsApply transform pts list)
