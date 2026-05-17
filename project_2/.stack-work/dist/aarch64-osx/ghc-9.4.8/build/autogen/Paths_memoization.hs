@@ -43,7 +43,7 @@ getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: 
 
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 bindir     = "/Users/simongustafsson/Desktop/Bachelors in Mathematics/EDAN40/project_2/.stack-work/install/aarch64-osx/a47b28e08280c1d53b2405b76b6efedba2ec2fa22ccade886cc50b89201311fd/9.4.8/bin"
-libdir     = "/Users/simongustafsson/Desktop/Bachelors in Mathematics/EDAN40/project_2/.stack-work/install/aarch64-osx/a47b28e08280c1d53b2405b76b6efedba2ec2fa22ccade886cc50b89201311fd/9.4.8/lib/aarch64-osx-ghc-9.4.8/memoization-0.1.0.0-7cZbG0NQDDQ6NrRBQDk9Sd"
+libdir     = "/Users/simongustafsson/Desktop/Bachelors in Mathematics/EDAN40/project_2/.stack-work/install/aarch64-osx/a47b28e08280c1d53b2405b76b6efedba2ec2fa22ccade886cc50b89201311fd/9.4.8/lib/aarch64-osx-ghc-9.4.8/memoization-0.1.0.0-G2fTMDa2CP38evbHGpvH8L"
 dynlibdir  = "/Users/simongustafsson/Desktop/Bachelors in Mathematics/EDAN40/project_2/.stack-work/install/aarch64-osx/a47b28e08280c1d53b2405b76b6efedba2ec2fa22ccade886cc50b89201311fd/9.4.8/lib/aarch64-osx-ghc-9.4.8"
 datadir    = "/Users/simongustafsson/Desktop/Bachelors in Mathematics/EDAN40/project_2/.stack-work/install/aarch64-osx/a47b28e08280c1d53b2405b76b6efedba2ec2fa22ccade886cc50b89201311fd/9.4.8/share/aarch64-osx-ghc-9.4.8/memoization-0.1.0.0"
 libexecdir = "/Users/simongustafsson/Desktop/Bachelors in Mathematics/EDAN40/project_2/.stack-work/install/aarch64-osx/a47b28e08280c1d53b2405b76b6efedba2ec2fa22ccade886cc50b89201311fd/9.4.8/libexec/aarch64-osx-ghc-9.4.8/memoization-0.1.0.0"

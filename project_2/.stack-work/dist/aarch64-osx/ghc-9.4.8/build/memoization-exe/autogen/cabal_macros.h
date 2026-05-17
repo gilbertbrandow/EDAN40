@@ -133,7 +133,7 @@
 #endif /* MIN_TOOL_VERSION_runghc */
 
 #ifndef CURRENT_COMPONENT_ID
-#define CURRENT_COMPONENT_ID "memoization-0.1.0.0-BtKw2Bo1SCkHxxWIM4bDjc-memoization-exe"
+#define CURRENT_COMPONENT_ID "memoization-0.1.0.0-7b2R2nuVD3lAOptRnXQ0y7-memoization-exe"
 #endif /* CURRENT_COMPONENT_ID */
 #ifndef CURRENT_PACKAGE_VERSION
 #define CURRENT_PACKAGE_VERSION "0.1.0.0"
