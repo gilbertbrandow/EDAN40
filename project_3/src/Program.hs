@@ -1,3 +1,5 @@
+-- Leon Krasniqi and Simon Gustafsson
+
 module Program(T, parse, fromString, toString, exec) where
 
 import Parser hiding (T)
