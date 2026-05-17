@@ -1,3 +1,5 @@
+-- Leon Krasniqi and Simon Gustafsson
+
 module Expr(Expr, T, parse, fromString, value, toString, Result) where
 
 {-
