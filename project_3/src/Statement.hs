@@ -19,13 +19,13 @@ data Statement =
 
 assignment = word #- accept ":=" # Expr.parse #- require ";" >-> uncurry Assignment
 
-skip = accept "skip" -# require ";" >-> Skip
+skip = accept "skip" -# require ";" >-> \_ -> Skip
 
-begin = accept "begin" -# iter parse #- require "end" >-> uncurry Begin
+begin = accept "begin" -# iter parse #- require "end" >-> Begin
 
 while = accept "while" -# Expr.parse  #-  require "do" # parse >-> uncurry While
 
-readStmt = accept "read" -# Expr.parse #- require ";" >-> Read
+readStmt = accept "read" -# word #- require ";" >-> (Read . Expr.Var)
 
 writeStmt = accept "write" -# Expr.parse #- require ";" >-> Write
 
@@ -44,9 +44,8 @@ instance Executable Statement where
                     execute (thenStmts: stmts) dict input
                 else
                     execute (elseStmts: stmts) dict input
-    execute (Assignment name stmts) dict input = 
 
 
 instance Parse Statement where
-  parse = assignment ! skip ! begin ! while ! read ! write ! ifStatment
+  parse = assignment ! skip ! begin ! while ! readStmt ! writeStmt ! ifStmt
   toString = error "Statement.toString not implemented"
