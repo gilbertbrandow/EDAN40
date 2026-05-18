@@ -25,7 +25,7 @@ begin = accept "begin" -# iter parse #- require "end" >-> Begin
 
 while = accept "while" -# Expr.parse  #-  require "do" # parse >-> uncurry While
 
-readStmt = accept "read" -# word #- require ";" >-> (Read . Expr.Var)
+readStmt = accept "read" -# Expr.parse #- require ";" >-> Read
 
 writeStmt = accept "write" -# Expr.parse #- require ";" >-> Write
 
@@ -40,7 +40,7 @@ instance Executable Statement where
     execute (Assignment name expr : stmts) dict input =
         case (Expr.value expr dict) of
             Left err -> error err
-            Right v -> execute stmts (Dictionary.insert (varName, v) dict) input    
+            Right v -> execute stmts (Dictionary.insert (name, v) dict) input    
     execute (If cond thenStmts elseStmts: stmts) dict input =
         case (Expr.value cond dict) of
             Left err -> error err
