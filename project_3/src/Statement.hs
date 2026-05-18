@@ -36,6 +36,11 @@ class Executable t where
 
 instance Executable Statement where
     -- execute :: [Statement] -> Dictionary.T String Integer -> [Integer] -> [Integer]
+    execute (Skip : stmts) dict input = execute stmts dict input
+    execute (Assignment name expr : stmts) dict input =
+        case (Expr.value expr dict) of
+            Left err -> error err
+            Right v -> execute stmts (Dictionary.insert (varName, v) dict) input    
     execute (If cond thenStmts elseStmts: stmts) dict input =
         case (Expr.value cond dict) of
             Left err -> error err
