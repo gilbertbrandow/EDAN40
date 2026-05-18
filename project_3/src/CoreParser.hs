@@ -1,3 +1,5 @@
+-- Leon Krasniqi and Simon Gustafsson
+
 module CoreParser(Parser, char, return, fail, (#), (!), (?), (#>), (>->),
                   Parse, parse, toString, fromString) where
 

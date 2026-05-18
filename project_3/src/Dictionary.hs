@@ -1,3 +1,5 @@
+-- Leon Krasniqi and Simon Gustafsson
+
 module Dictionary (T, empty, lookup, insert) where
 
 import Prelude hiding (lookup)
