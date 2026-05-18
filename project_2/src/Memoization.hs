@@ -1,3 +1,12 @@
+-- Simon Gustafsson
+
+-- fibo 35 takes 6.06 secs, fastFibo2 35 takes 0.02 secs
+
+-- Examples of lps:
+-- "åäö" returns "\246"
+-- "neveroddoreven" returns "neveroddoreven"
+-- "aab" returns "aa"
+-- "lunduniversity" returns "isi"
 module Memoization where
 
 -- This is an assignment where we try to memoize functions
@@ -262,7 +271,7 @@ openLPS f s
 
 -- Fast!
 fastLPS :: String -> String
-fastLPS = trieLookup (trieCache ['a'..'z'] (openLPS fastLPS))
+fastLPS = trieLookup (trieCache (['a'..'z'] ++ "åäö") (openLPS fastLPS))
 
 -- So, what were the tricks?
 -- The first one is to build an infinite data-structure, to memoize the function
