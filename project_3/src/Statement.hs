@@ -73,12 +73,12 @@ instance Executable Statement where
 
 instance Parse Statement where
   parse = assignment ! skip ! block ! while ! readStmt ! writeStmt ! ifStmt
-  toString (Assignment var expr) = var++":="++Expr.toString expr++";"
-  toString Skip="skip;"
-  toString (Block stmts) ="begin" ++ concatMap toString stmts++"end"
-  toString (While cond doStmt)="while"++Expr.toString cond++"do"++Expr.toString doStmt
-  toString (Read word) ="read"++word++";"
-  toString (Write expr) ="write"++Expr.toString expr++";"
-  toString (If cond thenStmts elseStmts)="if"++Expr.toString cond++"then"++Expr.toString thenStmts++"else" ++ Expr.toString elseStmts
+  toString (Assignment var expr) = var ++ " := " ++ Expr.toString expr ++ ";"
+  toString Skip = "skip;"
+  toString (Block stmts) = "begin " ++ concatMap toString stmts ++ "end"
+  toString (While cond doStmt) = "while " ++ Expr.toString cond ++ " do " ++ toString doStmt
+  toString (Read var) = "read " ++ var ++ ";"
+  toString (Write expr) = "write " ++ Expr.toString expr ++ ";"
+  toString (If cond thenStmt elseStmt) = "if " ++ Expr.toString cond ++ " then " ++ toString thenStmt ++ " else " ++ toString elseStmt
 
   
