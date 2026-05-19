@@ -7,17 +7,17 @@ import qualified Statement
 import qualified Dictionary
 import Prelude hiding (return, fail)
 
-newtype T = Program () -- to be defined
+newtype T = Program [Statement.T]
 
 instance Eq T where
-  p1 == p2 = False -- FIXME
+  p1 == p2 = toString p1 == toString p2
 
 instance Show T where
   show = toString
 
 instance Parse T where
-  parse = error "Program.parse not implemented"
-  toString = error "Program.toString not implemented"
+  parse = iter Statement.parse >-> Program
+  toString (Program stmts) = concatMap Statement.toString stmts
 
 exec :: T -> [Integer] -> [Integer]
-exec = error "Program.exec not implemented"
+exec (Program stmts) input = Statement.execute stmts Dictionary.empty input
