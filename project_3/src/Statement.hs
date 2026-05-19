@@ -2,8 +2,8 @@
 
 module Statement (T, parse, toString, fromString, execute) where
 
-import Dictionary qualified
-import Expr qualified
+import qualified Dictionary
+import qualified Expr
 import Parser hiding (T)
 import Prelude hiding (fail, return)
 
@@ -23,7 +23,7 @@ assignment = word #- accept ":=" # Expr.parse #- require ";" >-> uncurry Assignm
 
 skip = accept "skip" -# require ";" >-> \_ -> Skip
 
-begin = accept "begin" -# iter parse #- require "end" >-> Block
+block = accept "begin" -# iter parse #- require "end" >-> Block
 
 while = accept "while" -# Expr.parse #- require "do" # parse >-> uncurry While
 
@@ -37,16 +37,16 @@ class Executable t where
   execute :: [t] -> Dictionary.T String Integer -> [Integer] -> [Integer]
 
 instance Executable Statement where
-  execute [] dict input = []
+  execute [] _ _ = []
   execute (Assignment name expr : stmts) dict input =
-    case (Expr.value expr dict) of
+    case Expr.value expr dict of
       Left err -> error err
       Right v -> execute stmts (Dictionary.insert (name, v) dict) input
   execute (Skip : stmts) dict input = execute stmts dict input
   execute (Block block : stmts) dict input =
     execute (block ++ stmts) dict input
   execute (While cond doStmt : stmts) dict input =
-    case (Expr.value cond dict) of
+    case Expr.value cond dict of
       Left err -> error err
       Right v ->
         if v > 0
@@ -72,5 +72,13 @@ instance Executable Statement where
             execute (elseStmts : stmts) dict input
 
 instance Parse Statement where
-  parse = assignment ! skip ! begin ! while ! readStmt ! writeStmt ! ifStmt
-  toString = error "Statement.toString not implemented"
+  parse = assignment ! skip ! block ! while ! readStmt ! writeStmt ! ifStmt
+  toString (Assignment var expr) = var++":="++Expr.toString expr++";"
+  toString Skip="skip;"
+  toString (Block stmts) ="begin" ++ concatMap toString stmts++"end"
+  toString (While cond doStmt)="while"++Expr.toString cond++"do"++Expr.toString doStmt
+  toString (Read word) ="read"++word++";"
+  toString (Write expr) ="write"++Expr.toString expr++";"
+  toString (If cond thenStmts elseStmts)="if"++Expr.toString cond++"then"++Expr.toString thenStmts++"else" ++ Expr.toString elseStmts
+
+  
