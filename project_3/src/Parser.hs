@@ -73,7 +73,7 @@ accept :: String -> Parser String
 accept w = (token (chars (length w))) ? (==w)
 
 require :: String -> Parser String
-require w = accept w ! err w
+require w = accept w ! fail
 
 lit :: Char -> Parser Char
 lit c = token char ? (==c)
@@ -92,4 +92,6 @@ number' n = digitVal #> (\ d -> number' (10*n+d))
           ! return n
 number :: Parser Integer
 number = token (digitVal #> number')
+
+
 
